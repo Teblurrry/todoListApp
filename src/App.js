@@ -1,32 +1,27 @@
 //main component for rendering the todoList component
 import React from 'react';
 import './App.css';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Register from './Register';
+import Login from './Login';
 import TodoList from './TodoList';
-import { useState } from 'react';
-import TodoForm from './TodoForm';
-import axios from 'axios';
+import { AuthProvider } from './AutoContext';
+import ProtectedRoute from './ProtectedRoute';
+import { Component } from 'react';
 
-const App = () => {
-  const [todos, setTodos] = useState([]);
-
-  const addTodo = (newTodo) => {
-    setTodos([...todos, newTodo]);
-  };
-
-  const deleteTodo = (id) => {
-    axios.delete(`http://localhost:8080/api/v1/todos/${id}`)
-    .then(() => {
-      setTodos(todos.filter(todo => todo.id !== id));
-    })
-    .catch(error => console.error(error));
-  };
-
+const App = () => { 
   return (
-    <div>
-      <h1>Todo List</h1>
-      <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
-    </div>
+    <AuthProvider>
+      <Router>
+        <div className='App'>
+          <Switch>
+            <Route path="/register" Component={Register} />
+            <Route path="/login" Component={Login} />
+            <ProtectedRoute path="/todolist" component={TodoList} />
+          </Switch>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 
