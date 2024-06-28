@@ -2,6 +2,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AutoContext';
+import { Navigate } from 'react-router-dom';
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -14,7 +15,7 @@ function Login() {
             const response = await axios.post('/login', {username, password});
             login(response.data.token); //a jwt token is returned by backend
             alert("Successful Login");
-            window.location.href = '/todolist';
+            return <Navigate to="/todolist" />; //use navigate component to navigate after login
         } catch (error) {
             alert('Login failed');
         }

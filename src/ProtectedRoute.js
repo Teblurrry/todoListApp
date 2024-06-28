@@ -1,22 +1,16 @@
 //protects routes that require authentication
-import React, {Component, useContext} from "react";
-import {Route, Redirect} from 'react-router-dom';
+import React, {useContext} from "react";
+import {Navigate} from 'react-router-dom';
 import { AuthContext } from "./AutoContext";
 
-const ProtectedRoute = ({component: Component, ...rest}) => {
+const ProtectedRoute = ({children}) => {
     const {auth} = useContext(AuthContext);
 
-    return (
-        <Route
-        {...rest}
-        render = {props => 
-        auth ? (
-            <Component {...props} />
-        ) : (
-            <Redirect to="/login" />
-        )}
-        />
-    );
+    if (!auth) {
+        return <Navigate to="/login" />;
+    }
+
+    return children;
 };
 
 export default ProtectedRoute;

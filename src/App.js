@@ -1,28 +1,26 @@
 //main component for rendering the todoList component
 import React from 'react';
 import './App.css';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import TodoList from './TodoList';
 import { AuthProvider } from './AutoContext';
 import ProtectedRoute from './ProtectedRoute';
-import { Component } from 'react';
 
 const App = () => { 
   return (
-    <AuthProvider>
       <Router>
-        <div className='App'>
-          <Switch>
-            <Route path="/register" Component={Register} />
-            <Route path="/login" Component={Login} />
-            <ProtectedRoute path="/todolist" component={TodoList} />
-          </Switch>
-        </div>
+        <AuthProvider>
+          <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/todolist" element={<ProtectedRoute><TodoList /></ProtectedRoute>} />
+          </Routes>
+        </AuthProvider>
       </Router>
-    </AuthProvider>
   );
-};
+}
 
 export default App;
